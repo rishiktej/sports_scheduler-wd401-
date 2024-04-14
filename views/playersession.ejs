@@ -133,7 +133,9 @@
             <% data.forEach(session=> { %>
                 <% const hasJoined=session.joined ? session.joined.includes(loggedInUser) : false; %>
                     <% const sessionTime=new Date(session.time); %>
-                        <% const currentTime=new Date(); %>
+                        <% const currentTime=new Date();
+                        currentTime.setHours(currentTime.getHours() + 5);
+currentTime.setMinutes(currentTime.getMinutes() + 30); %>
                             <% const isPastSession=sessionTime < currentTime; %>
                                 <% if (!session.cancel_status && !isPastSession) { %>
                                     <div>
@@ -169,9 +171,8 @@
                                                             hour: 'numeric' , minute: 'numeric' , hour12: true }) %>
                                                     </td>
                                                     <td class="border-b">
-                                                        <% const organizerIndex=userIds.indexOf(session.userId); %>
-                                                            <%= organizerIndex !==-1 ? usernames[organizerIndex]
-                                                                : 'Unknown Organizer' %>
+                                                            <% const organizer=userIdUsernameArray.find(user=> user.userId === session.userId); %>
+                                                                <%= organizer ? organizer.username : 'Unknown Organizer' %>
                                                     </td>
                                                     <td class="border-b">
                                                         <% const emptySlots=session.playercount - (session.playernames ?

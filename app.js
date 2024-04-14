@@ -86,6 +86,14 @@ passport.deserializeUser((id, done) => {
     });
 });
 
+function requireadmin(req, res, next) {
+  if (req.user && req.user.admin === true) {
+    return next();
+  } else {
+    res.status(401).json({ message: "Unauthorized user." });
+  }
+}
+
 app.get("/", async (request, response) => {
   if (request.accepts("html")) {
     response.render("index.ejs", {
@@ -180,10 +188,6 @@ app.get("/signout", (request, response) => {
   });
 });
 
-app.get("/cancelsession", async (request, response) => {
-  response.redirect("/admin");
-});
-
 app.get(
   "/usertype",
   connectEnsureLogin.ensureLoggedIn(),
@@ -203,6 +207,7 @@ app.get(
 
 app.get(
   "/admin",
+  requireadmin,
   connectEnsureLogin.ensureLoggedIn(),
   async (request, response) => {
     const loggedInUser = request.user.id;
@@ -289,15 +294,26 @@ app.post(
     const sport_name = request.query.sportname;
     const { venue, numberofTeams, numberofplayers, playerNames, time } =
       request.body;
+    const istDateTime = new Date(time);
+    const utcDateTime = new Date(
+      istDateTime.getTime() - istDateTime.getTimezoneOffset() * 60000
+    );
+    const utcTime = utcDateTime.toISOString();
     const sportname = sport_name.toLowerCase();
-    console.log("checking:", request.body);
+    const playernameslength = playerNames.split(",").length;
+
     try {
+      if (playernameslength > numberofplayers) {
+        request.flash("error", "Adding more players than specified");
+        return response.redirect(`/create-session?sportname=${sportname}`);
+      }
+
       await sportsession.addsession({
         venue: venue,
         numberofTeams: numberofTeams,
         numberofplayers: numberofplayers,
         playerNames: playerNames,
-        time: time,
+        time: utcTime,
         userId: request.user.id,
         sport_name: sportname,
       });
@@ -347,21 +363,26 @@ app.get(
     const sessions = await sportsession.getsession(sportName);
     console.log(sessions);
     const userIds = sessions.map((session) => session.userId);
+    console.log(userIds);
     const users = await Users.findAll({
       where: {
         id: userIds,
       },
     });
     console.log(users);
-    const usernames = users.map((user) => `${user.firstName} ${user.lastName}`);
-    console.log(usernames);
+    const userIdUsernameArray = users.map((user) => {
+      return {
+        userId: user.id,
+        username: `${user.firstName} ${user.lastName}`,
+      };
+    });
     try {
       response.render("playersession.ejs", {
         title: "Sport Sessions",
         data: sessions,
         username,
         sportName,
-        usernames,
+        userIdUsernameArray,
         loggedInUser,
         userIds,
         csrfToken: request.csrfToken(),
@@ -428,12 +449,17 @@ app.get(
         id: userIds,
       },
     });
-    const usernames = users.map((user) => `${user.firstName} ${user.lastName}`);
+    const userIdUsernameArray = users.map((user) => {
+      return {
+        userId: user.id,
+        username: `${user.firstName} ${user.lastName}`,
+      };
+    });
     try {
       response.render("cancelled-session.ejs", {
         data: sessions,
         username,
-        usernames,
+        userIdUsernameArray,
         userIds,
         csrfToken: request.csrfToken(),
       });
@@ -458,14 +484,19 @@ app.get(
         id: userIds,
       },
     });
-    const usernames = users.map((user) => `${user.firstName} ${user.lastName}`);
+    const userIdUsernameArray = users.map((user) => {
+      return {
+        userId: user.id,
+        username: `${user.firstName} ${user.lastName}`,
+      };
+    });
     response.render("joinedsessions", {
       title: "Joined Sessions",
       data: joinedSessions,
       loggedInUser: loggedInUser,
       sports,
       userIds,
-      usernames,
+      userIdUsernameArray,
       csrfToken: request.csrfToken(),
     });
   }
@@ -488,6 +519,7 @@ app.post(
 );
 app.get(
   "/reports",
+  requireadmin,
   connectEnsureLogin.ensureLoggedIn(),
   async (request, response) => {
     const fromDate = request.query.fromDate;
@@ -523,13 +555,18 @@ app.get(
         id: userIds,
       },
     });
-    const usernames = users.map((user) => `${user.firstName} ${user.lastName}`);
+    const userIdUsernameArray = users.map((user) => {
+      return {
+        userId: user.id,
+        username: `${user.firstName} ${user.lastName}`,
+      };
+    });
     try {
       response.render("pastsession.ejs", {
         data: sessions,
         sportname,
         username,
-        usernames,
+        userIdUsernameArray,
         userIds,
         csrfToken: request.csrfToken(),
       });
@@ -551,6 +588,7 @@ app.get(
     }
   }
 );
+
 app.post(
   "/change-password",
   connectEnsureLogin.ensureLoggedIn(),
@@ -573,27 +611,24 @@ app.post(
             user.password = hashedPwd;
             await user.save();
             response.redirect("/player");
-            response.write(
-              '<script>alert("Your password has been changed successfully.");</script>'
-            );
-            response.end();
           } else {
-            response.render("changepassword", {
-              error: "Incorrect current password",
-            });
+            request.flash("error", "Incorrect current password");
+            response.redirect("/change-password");
           }
         } else {
-          response.render("changepassword", { error: "User not found" });
+          request.flash("error", "User not found");
+          response.redirect("/change-password");
         }
       } else {
-        response.render("changepassword", {
-          error: "New passwords do not match or match the current password",
-        });
+        request.flash(
+          "error",
+          "New passwords do not match or match the current password"
+        );
+        response.redirect("/change-password");
       }
     } catch (error) {
-      response.render("changepassword", {
-        error: "An error occurred while changing the password",
-      });
+      console.log(error);
+      response.status(500).send("Internal Server Error");
     }
   }
 );

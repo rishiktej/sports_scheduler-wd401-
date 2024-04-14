@@ -75,6 +75,8 @@
                 <% const pastSessions=data.filter(session=> {
                     const sessionTime = new Date(session.time);
                     const currentTime = new Date();
+                    currentTime.setHours(currentTime.getHours() + 5);
+                    currentTime.setMinutes(currentTime.getMinutes() + 30);
                     return sessionTime < currentTime && session.sport_name===sportname; }); %>
                         <% if (pastSessions.length===0) { %>
                             <p class="no-sessions">No past sessions available for <%= sportname %>.</p>
@@ -113,9 +115,8 @@
                                                             hour: 'numeric' , minute: 'numeric' , hour12: true }) %>
                                                     </td>
                                                     <td class="td">
-                                                        <% const organizerIndex=userIds.indexOf(session.userId); %>
-                                                            <%= organizerIndex !==-1 ? usernames[organizerIndex]
-                                                                : 'Unknown Organizer' %>
+                                                        <% const organizer=userIdUsernameArray.find(user=> user.userId === session.userId); %>
+                                                            <%= organizer ? organizer.username : 'Unknown Organizer' %>
                                                     </td>
                                                     <td class="td">
                                                         <%= session.sport_name %>
