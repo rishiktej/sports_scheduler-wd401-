@@ -60,6 +60,7 @@ passport.use(
         }
 
         const result = await bcrypt.compare(password, user.password);
+        console.log(result);
         if (result) {
           return done(null, user);
         } else {
@@ -369,6 +370,7 @@ app.get(
         id: userIds,
       },
     });
+
     const userIdUsernameArray = users.map((user) => {
       return {
         userId: user.id,
