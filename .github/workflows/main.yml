@@ -81,7 +81,6 @@ jobs:
     runs-on: ubuntu-latest
     if: needs.run-tests.result == 'success'
 
-    # Steps to execute within the job
     steps:
       # Deploy to production using a custom action
       - name: Deploy to production
