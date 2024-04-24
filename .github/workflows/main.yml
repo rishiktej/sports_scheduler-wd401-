@@ -1,7 +1,6 @@
 name: CI/CD
 on: push
 
-
 env:
   PG_DATABASE: "${{ secrets.POSTGRES_DATABASE }}"
   PG_USER: "${{ secrets.POSTGRES_USER }}"
@@ -59,26 +58,22 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      -
-        name: Checkout
+      - name: Checkout
         uses: actions/checkout@v4
-      -
-        name: Login to Docker Hub
+      - name: Login to Docker Hub
         uses: docker/login-action@v3
         with:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
-      -
-        name: Set up Docker Buildx
+      - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
-      -
-        name: Build and push
+      - name: Build and push
         uses: docker/build-push-action@v5
         with:
           context: .
           file: ./Dockerfile
           push: true
-          tags: ${{ secrets.DOCKERHUB_USERNAME }}/sports_scheduler:latest        
+          tags: ${{ secrets.DOCKERHUB_USERNAME }}/sports-scheduler:latest
 
   # # Job to deploy the app to production
   deploy:
@@ -96,7 +91,6 @@ jobs:
           service-id: "${{ secrets.MY_RENDER_SERVICE_ID }}"
           api-key: "${{ secrets.MY_RENDER_API_KEY }}"
 
-  
   notify:
     # Define the job dependencies
     needs: [run-tests, deploy]
