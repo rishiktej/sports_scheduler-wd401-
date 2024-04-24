@@ -80,7 +80,7 @@ jobs:
           push: true
           tags: ${{ secrets.DOCKERHUB_USERNAME }}/todoapp:latest        
 
-  # Job to deploy the app to production
+ 
   # deploy:
   #   # Define the job dependencies
   #   needs: run-tests
