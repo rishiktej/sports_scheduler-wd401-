@@ -1,7 +1,6 @@
 const app = require("./app");
 const Sentry = require("@sentry/node");
-import { nodeProfilingIntegration } from "@sentry/profiling-node";
-import express from "express";
+const { nodeProfilingIntegration } = require("@sentry/profiling-node");
 
 Sentry.init({
   dsn: "https://c0fa10d459de17f39cca2ed77476a3e6@o4506938780418048.ingest.us.sentry.io/4507142324879360",
