@@ -74,7 +74,7 @@ jobs:
 
       - name: Docker Push
         run: docker push ${{ secrets.DOCKERHUB_USERNAME }}/sports-scheduler
-  # # Job to deploy the app to production
+ 
   deploy:
     # Define the job dependencies
     needs: run-tests
