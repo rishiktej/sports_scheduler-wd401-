@@ -1,19 +1,18 @@
 {
-   "translation":
-{
-  "title": "Sports-Scheduler App",
-  "description": "A simple and easy-to-use sports scheduler",
-  "welcomeMessage": "Welcome to Sports-Scheduler",
-  "intro": "Sports-Scheduler is a simple and easy-to-use sports scheduler that allows you to easily keep track of your sports schedules.",
-  "features": "With Sports-Scheduler, you can:",
-  "featuresList": [
-    "Add your favorite sports",
-    "See available sessions",
-    "Join the sessions",
-    "Create the sessions",
-    "Cancel the created sessions"
-  ],
-  "signupLink": "If you don't have an account yet,",
-  "loginLink": "If you already have an account,"
-}
+  "translation": {
+    "title": "Sports-Scheduler App",
+    "description": "A simple and easy-to-use sports scheduler",
+    "welcomeMessage": "Welcome to Sports-Scheduler",
+    "intro": "Sports-Scheduler is a simple and easy-to-use sports scheduler that allows you to easily keep track of your sports schedules.",
+    "features": "With Sports-Scheduler, you can:",
+    "featuresList": [
+      "Add your favorite sports",
+      "See available sessions",
+      "Join the sessions",
+      "Create the sessions",
+      "Cancel the created sessions"
+    ],
+    "signupLink": "If you don't have an account yet,",
+    "loginLink": "If you already have an account,"
+  }
 }
