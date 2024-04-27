@@ -1,0 +1,18 @@
+{
+"translation": {
+  "title": "Sport-Terminplaner App",
+  "description": "Ein einfacher und benutzerfreundlicher Sport-Terminplaner",
+  "welcomeMessage": "Willkommen bei Sports-Scheduler",
+  "intro": "Sports-Scheduler ist ein einfacher und benutzerfreundlicher Sport-Terminplaner, mit dem Sie Ihre Sportpläne leicht im Blick behalten können.",
+  "features": "Mit Sports-Scheduler können Sie:",
+  "featuresList": [
+    "Fügen Sie Ihre Lieblingssportarten hinzu",
+    "Siehe verfügbare Sitzungen",
+    "An den Sitzungen teilnehmen",
+    "Erstellen Sie die Sitzungen",
+    "Stornieren Sie die erstellten Sitzungen"
+  ],
+  "signupLink": "Wenn Sie noch kein Konto haben,",
+  "loginLink": "Wenn Sie bereits ein Konto haben,"
+}
+}

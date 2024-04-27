@@ -1,0 +1,19 @@
+{
+"translation":
+{
+  "title": "Application de planification sportive",
+  "description": "Un planificateur sportif simple et facile à utiliser",
+  "welcomeMessage": "Bienvenue sur Sports-Scheduler",
+  "intro": "Sports-Scheduler est un planificateur sportif simple et facile à utiliser qui vous permet de suivre facilement vos horaires de sport.",
+  "features": "Avec Sports-Scheduler, vous pouvez:",
+  "featuresList": [
+    "Ajoutez vos sports préférés",
+    "Voir les sessions disponibles",
+    "Rejoindre les sessions",
+    "Créer les sessions",
+    "Annuler les sessions créées"
+  ],
+  "signupLink": "Si vous n'avez pas encore de compte,",
+  "loginLink": "Si vous avez déjà un compte,"
+}
+}

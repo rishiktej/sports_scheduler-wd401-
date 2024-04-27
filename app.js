@@ -14,6 +14,19 @@ const LocalStartegy = require("passport-local");
 const bcrypt = require("bcrypt");
 const { error } = require("console");
 const saltRounds = 10;
+const i18next = require("i18next");
+const i18nextMiddleware = require("i18next-http-middleware");
+const Backend = require("i18next-fs-backend");
+i18next
+  .use(Backend)
+  .use(i18nextMiddleware.LanguageDetector)
+  .init({
+    fallbackLng: "en",
+    backend: {
+      loadPath: "./locales/{{lng}}.json",
+    },
+  });
+
 app.use(cookieParser("shh!some secret string"));
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
@@ -94,11 +107,11 @@ function requireadmin(req, res, next) {
     res.status(401).json({ message: "Unauthorized user." });
   }
 }
-
+app.use(i18nextMiddleware.handle(i18next));
 app.get("/", async (request, response) => {
   if (request.accepts("html")) {
     response.render("index.ejs", {
-      title: "sport-scheduler application",
+      title: "sport-scheduler",
     });
   } else {
     response.json({});

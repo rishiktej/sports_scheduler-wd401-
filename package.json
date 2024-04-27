@@ -9,7 +9,8 @@
     "pretest": "NODE_ENV=test npx sequelize-cli db:drop && NODE_ENV=test npx sequelize-cli db:create",
     "test": "NODE_ENV=test jest --detectOpenHandles",
     "prepare": "cd .. && husky install sports-scheduler/.husky",
-    "clean:start": "npm run pretest && NODE_ENV=test npm start"
+    "clean:start": "npm run pretest && NODE_ENV=test npm start",
+    "build": "webpack --mode production"
   },
   "lint-staged": {
     "*.js": [
@@ -20,6 +21,9 @@
   "author": "rishiktejreddy <rishiktejgangadi@gmail.com>",
   "license": "ISC",
   "devDependencies": {
+    "@babel/core": "^7.24.4",
+    "@babel/preset-env": "^7.24.4",
+    "babel-loader": "^9.1.3",
     "cheerio": "^1.0.0-rc.12",
     "eslint": "^8.41.0",
     "husky": "^8.0.3",
@@ -29,13 +33,13 @@
     "nodemon": "^3.1.0",
     "prettier": "^2.8.8",
     "sequelize-cli": "^6.6.1",
-    "supertest": "^6.3.3"
+    "supertest": "^6.3.3",
+    "webpack": "^5.91.0",
+    "webpack-cli": "^5.1.4"
   },
   "dependencies": {
-    "@babel/core": "^7.24.4",
     "@babel/plugin-proposal-class-properties": "^7.18.6",
     "@babel/plugin-proposal-object-rest-spread": "^7.20.7",
-    "@babel/preset-env": "^7.24.4",
     "@sentry/cli": "^2.31.0",
     "@sentry/node": "^7.112.2",
     "@sentry/profiling-node": "^7.112.2",
@@ -50,6 +54,8 @@
     "express": "^4.18.2",
     "express-session": "^1.17.3",
     "i18next": "^23.11.2",
+    "i18next-fs-backend": "^2.3.1",
+    "i18next-http-middleware": "^3.5.0",
     "passport": "^0.6.0",
     "passport-local": "^1.0.0",
     "pg": "^8.11.0",
