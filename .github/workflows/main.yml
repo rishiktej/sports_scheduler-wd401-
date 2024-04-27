@@ -90,7 +90,7 @@ jobs:
           api-key: "${{ secrets.MY_RENDER_API_KEY }}"
 
   notify:
-    # Define the job dependencies
+    
     needs: [run-tests, deploy]
     runs-on: ubuntu-latest
 
