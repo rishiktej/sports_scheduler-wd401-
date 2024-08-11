@@ -187,9 +187,9 @@ app.post("/users", async (request, response) => {
       response.redirect("/login");
     });
   } catch (error) {
+    console.log("error", error);
     request.flash("error", "Email is already registered");
     response.redirect("/signup");
-    console.log(error);
   }
 });
 
@@ -224,22 +224,37 @@ app.get(
   requireadmin,
   connectEnsureLogin.ensureLoggedIn(),
   async (request, response) => {
-    const loggedInUser = request.user.id;
-    const un = await Users.findByPk(request.user.id);
-    const username = un.firstName + " " + un.lastName;
-    const csports = await sport.getsport(loggedInUser);
-    if (request.accepts("html")) {
-      response.render("home.ejs", {
-        title: "sport-scheduler application",
-        csports,
-        username,
-        csrfToken: request.csrfToken(),
-      });
-    } else {
-      response.json({
-        csports,
-        username,
-      });
+    try {
+      const loggedInUser = request.user.id;
+      const un = await Users.findByPk(request.user.id);
+      if (!un) {
+        return response.status(404).send("User not found");
+      }
+      const username = un.firstName + " " + un.lastName;
+
+      let csports;
+      try {
+        csports = await sport.getsport(loggedInUser);
+      } catch (err) {
+        console.error(err);
+        return response.status(500).send("Error fetching sports data");
+      }
+      if (request.accepts("html")) {
+        response.render("home.ejs", {
+          title: "sport-scheduler application",
+          csports,
+          username,
+          csrfToken: request.csrfToken(),
+        });
+      } else {
+        response.json({
+          csports,
+          username,
+        });
+      }
+    } catch (err) {
+      console.error(err);
+      response.status(500).send("Internal Server Error");
     }
   }
 );
